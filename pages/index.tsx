@@ -1,16 +1,13 @@
-import { Button, Container, Paper, Stack, Typography } from "@mui/material";
+import {
+  Checkbox,
+  Container,
+  FormControlLabel,
+  FormGroup,
+  Stack,
+  Typography,
+} from "@mui/material";
 import type { NextPage } from "next";
-import { useCreateRoom } from "../src/Room";
-
-const CreateRoomButton = () => {
-  const createRoom = useCreateRoom();
-
-  return (
-    <Button variant="contained" onClick={() => createRoom()}>
-      Create Room
-    </Button>
-  );
-};
+import CreateRoomForm from "../src/components/CreateRoomForm";
 
 const Home: NextPage = () => {
   return (
@@ -27,9 +24,7 @@ const Home: NextPage = () => {
           or desktop. Press &quot;Create Room&quot; to create a room to register
           the agenda data.
         </Typography>
-        <Stack direction="row">
-          <CreateRoomButton />
-        </Stack>
+        <CreateRoomForm />
       </Stack>
     </Container>
   );

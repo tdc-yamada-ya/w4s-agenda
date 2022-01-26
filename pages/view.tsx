@@ -1,5 +1,6 @@
 import { Box, Typography } from "@mui/material";
 import type { NextPage } from "next";
+import { CSSTransition, SwitchTransition } from "react-transition-group";
 import { useCurrentRoomSelectedItem } from "../src/Item";
 import { useCurrentRoom } from "../src/Room";
 
@@ -9,11 +10,52 @@ const flexVerticalAlignMap = {
   bottom: "flex-end",
 } as const;
 
+const shadow = ({
+  ox,
+  oy,
+  blur,
+  color,
+}: {
+  ox: number;
+  oy: number;
+  blur: number;
+  color: string;
+}) => `${ox}em ${oy}em ${blur}em ${color}`;
+
+const multiShadow = ({
+  resolution = 32,
+  blur = 0.02,
+  color,
+  offset,
+}: {
+  resolution?: number;
+  blur?: number;
+  color: string;
+  offset: number;
+}) => {
+  const ss: string[] = [];
+
+  for (let a = 0; a < Math.PI * 2; a += (Math.PI * 2) / resolution) {
+    ss.push(
+      shadow({
+        ox: Math.cos(a) * offset,
+        oy: Math.sin(a) * offset,
+        blur,
+        color,
+      })
+    );
+  }
+
+  return ss;
+};
+
 const View: NextPage = () => {
   const room = useCurrentRoom();
   const item = useCurrentRoomSelectedItem();
-
-  console.log(room?.data?.horizontal);
+  const title = item?.data?.title ?? "";
+  const textColor = room?.data?.textColor ?? "#f44336";
+  const borderColor1 = room?.data?.borderColor1 ?? "#ffffff";
+  const borderColor2 = room?.data?.borderColor2 ?? "#222222";
 
   return (
     <Box
@@ -30,9 +72,46 @@ const View: NextPage = () => {
         textAlign: room?.data?.horizontal,
       }}
     >
-      <Typography sx={{ fontSize: "4rem", fontWeight: "bold", width: "100%" }}>
-        {item?.data?.title}
-      </Typography>
+      <SwitchTransition>
+        <CSSTransition key={title} timeout={500} classNames="fade">
+          <Box
+            sx={{
+              "&.fade-enter": {
+                opacity: 0,
+              },
+              "&.fade-enter-active": {
+                opacity: 1,
+                transition: `opacity 500ms`,
+              },
+              "&.fade-exit": {
+                opacity: 1,
+              },
+              "&.fade-exit-active": {
+                opacity: 0,
+                transition: `opacity 500ms`,
+              },
+            }}
+          >
+            <Typography
+              sx={{
+                lineHeight: 1.2,
+                width: "100%",
+              }}
+              style={{
+                fontSize: "4rem",
+                fontWeight: "bold",
+                color: textColor,
+                textShadow: [
+                  ...multiShadow({ color: borderColor1, offset: 0.03 }),
+                  ...multiShadow({ color: borderColor2, offset: 0.08 }),
+                ].join(","),
+              }}
+            >
+              {item?.data?.title}
+            </Typography>
+          </Box>
+        </CSSTransition>
+      </SwitchTransition>
     </Box>
   );
 };

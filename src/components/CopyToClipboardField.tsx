@@ -1,4 +1,4 @@
-import { IconButton } from "@mui/material";
+import { IconButton, Link } from "@mui/material";
 import { Box } from "@mui/system";
 import { useEffect, useState } from "react";
 import CopyToClipboard from "react-copy-to-clipboard";
@@ -26,14 +26,18 @@ export const CopyToClipboardField = ({
         alignItems: "center",
         backgroundColor: "#eee",
         border: "1px solid #ccc",
-        borderRadius: "0.2rem",
+        borderRadius: "0.3rem",
         boxSizing: "border-box",
         display: "flex",
         gap: "0.5rem",
-        padding: "0.5rem",
+        padding: "0.5rem 0.5rem 0.5rem 1rem",
       }}
     >
-      <Box sx={{ flexGrow: 1, wordBreak: "break-all" }}>{value}</Box>
+      <Box sx={{ flexGrow: 1, wordBreak: "break-all" }}>
+        <Link href={value} target="_blank">
+          {value}
+        </Link>
+      </Box>
       <CopyToClipboard text={value} onCopy={() => setCopied(true)}>
         <IconButton>{copied ? <CheckIcon /> : <ContentCopyIcon />}</IconButton>
       </CopyToClipboard>
