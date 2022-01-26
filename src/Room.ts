@@ -1,21 +1,35 @@
 import {
   addDoc,
   collection,
+  deleteDoc,
   doc,
   onSnapshot,
   serverTimestamp,
+  Timestamp,
   updateDoc,
 } from "firebase/firestore";
 import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
 import { db } from "./firebase/db";
+import { deleteAllItems } from "./Item";
 
 export type RoomID = string;
 
+const colorNames = ["textColor", "borderColor1", "borderColor2"] as const;
+
+export type ColorName = typeof colorNames[number];
+
 export type RoomData = {
+  title?: string;
+
   selectedIndex?: number;
   horizontal?: "left" | "center" | "right";
   vertical?: "top" | "center" | "bottom";
+
+  createdAt?: Timestamp;
+  updatedAt?: Timestamp;
+} & {
+  [key in ColorName]?: string;
 };
 
 export type Room = {
@@ -23,24 +37,28 @@ export type Room = {
   data?: RoomData;
 };
 
-export const createDefaultRoomData = (): RoomData => ({
+export const createInitialRoomData = (): RoomData => ({
+  title: "My Room",
   selectedIndex: 0,
   horizontal: "right",
   vertical: "bottom",
+  textColor: "#F44336",
+  borderColor1: "#ffffff",
+  borderColor2: "#222222",
 });
 
 export const createRoom = async (): Promise<RoomID> => {
-  const d = createDefaultRoomData();
+  const d = createInitialRoomData();
   const r = await addDoc(collection(db, "rooms"), {
     ...d,
     createdAt: serverTimestamp(),
+    updatedAt: serverTimestamp(),
   });
   return r.id;
 };
 
 export const useCreateRoom = (): (() => Promise<void>) => {
   const router = useRouter();
-
   return async () => {
     const id = await createRoom();
     router.push({ pathname: "./room", query: { id } });
@@ -53,7 +71,10 @@ export const updateRoom = async (
 ): Promise<void> => {
   if (id == null) return;
 
-  await updateDoc(doc(db, "rooms", id), d);
+  await updateDoc(doc(db, "rooms", id), {
+    ...d,
+    updatedAt: serverTimestamp(),
+  });
 };
 
 export const useUpdateCurrentRoom = (): ((d: RoomData) => Promise<void>) => {
@@ -84,4 +105,20 @@ export const useCurrentRoom = (): Room | undefined => {
   const id = useCurrentRoomID();
   const room = useRoom(id);
   return room;
+};
+
+export const deleteRoom = async (id: RoomID | undefined) => {
+  if (id == null) return;
+
+  await deleteDoc(doc(db, "rooms", id));
+};
+
+export const useDeleteCurrentRoom = (): (() => Promise<void>) => {
+  const r = useRouter();
+  const id = useCurrentRoomID();
+  return async () => {
+    await deleteAllItems(id);
+    await deleteRoom(id);
+    r.replace("/");
+  };
 };

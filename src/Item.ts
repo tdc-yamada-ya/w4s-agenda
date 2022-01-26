@@ -31,10 +31,13 @@ export type Item = {
 export const deleteItem = (id: ItemID) =>
   deleteDoc(doc(db, "rooms", id.parentID, "items", id.id));
 
-export const deleteAllItems = async (id: RoomID) =>
+export const deleteAllItems = async (id: RoomID | undefined) => {
+  if (id == null) return;
+
   (await getDocs(collection(db, "rooms", id, "items"))).forEach((d) =>
     deleteDoc(d.ref)
   );
+};
 
 export const addItem = async (id: RoomID, data: ItemData): Promise<ItemID> => {
   const d = {
