@@ -10,7 +10,7 @@ import { Fragment } from "react";
 import { useCurrentRoomItems } from "../Item";
 import { useCurrentRoom, useUpdateCurrentRoom } from "../Room";
 import { CopyViewURLToClipboardField } from "./CopyViewURLToClipboardField";
-import RegisterItemsButton from "./RegisterItemsButton";
+import EditItemsButton from "./EditItemsButton";
 
 export const ItemList = () => {
   const room = useCurrentRoom();
@@ -26,17 +26,23 @@ export const ItemList = () => {
           <Skeleton animation="wave" />
         </Stack>
       ) : items.length === 0 ? (
-        <Stack spacing={2}>
-          <Typography>
-            No agenda items have been registered. Click on the &quot;Register
-            Items&quot; button to register your agenda.
-          </Typography>
-          <RegisterItemsButton />
-          <Typography>
-            After you have registered items, set &quot;Graphics URL&quot; to
-            your broadcast software such as OBS.
-          </Typography>
-          <CopyViewURLToClipboardField />
+        <Stack spacing={4}>
+          <Stack spacing={2}>
+            <Typography>
+              No agenda items have been registered. Click on the &quot;Edit
+              Items&quot; button to register your agenda.
+            </Typography>
+            <Stack direction="row">
+              <EditItemsButton />
+            </Stack>
+          </Stack>
+          <Stack spacing={2}>
+            <Typography>
+              After you have registered items, set &quot;Graphics URL&quot; to
+              your broadcast software such as OBS.
+            </Typography>
+            <CopyViewURLToClipboardField />
+          </Stack>
         </Stack>
       ) : (
         <List>

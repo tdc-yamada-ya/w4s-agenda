@@ -21,6 +21,7 @@ const colors = [
   "#222222",
   "#ffffff",
   "#607D8B",
+  "transparent",
 ];
 
 export const UpdateColorButtons = ({ name }: { name: ColorName }) => {

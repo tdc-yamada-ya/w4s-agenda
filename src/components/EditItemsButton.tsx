@@ -1,18 +1,18 @@
 import { Button } from "@mui/material";
 import { Fragment, useState } from "react";
-import RegisterItemsDialog from "./RegisterItemsDialog";
+import EditItemsDialog from "./EditItemsDialog";
 
-export const RegisterItemsButton = () => {
+export const EditItemsButton = () => {
   const [open, setOpen] = useState(false);
 
   return (
     <Fragment>
       <Button variant="outlined" onClick={() => setOpen(true)}>
-        Register Items
+        Edit Items
       </Button>
-      <RegisterItemsDialog open={open} onClose={() => setOpen(false)} />
+      <EditItemsDialog open={open} onClose={() => setOpen(false)} />
     </Fragment>
   );
 };
 
-export default RegisterItemsButton;
+export default EditItemsButton;

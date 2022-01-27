@@ -3,6 +3,7 @@ import {
   collection,
   deleteDoc,
   doc,
+  getDoc,
   onSnapshot,
   serverTimestamp,
   Timestamp,
@@ -25,6 +26,8 @@ export type RoomData = {
   selectedIndex?: number;
   horizontal?: "left" | "center" | "right";
   vertical?: "top" | "center" | "bottom";
+  fontSize?: number;
+  fontFamily?: string;
 
   createdAt?: Timestamp;
   updatedAt?: Timestamp;
@@ -121,4 +124,13 @@ export const useDeleteCurrentRoom = (): (() => Promise<void>) => {
     await deleteRoom(id);
     r.replace("/");
   };
+};
+
+export const getRoom = async (
+  id: RoomID | undefined
+): Promise<Room | undefined> => {
+  if (id == null) return;
+
+  const r = await getDoc(doc(db, "rooms", id));
+  return { id, data: r.data() };
 };

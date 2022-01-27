@@ -1,5 +1,6 @@
 import { Box, Typography } from "@mui/material";
 import type { NextPage } from "next";
+import { useEffect } from "react";
 import { CSSTransition, SwitchTransition } from "react-transition-group";
 import { useCurrentRoomSelectedItem } from "../src/Item";
 import { useCurrentRoom } from "../src/Room";
@@ -56,6 +57,20 @@ const View: NextPage = () => {
   const textColor = room?.data?.textColor ?? "#f44336";
   const borderColor1 = room?.data?.borderColor1 ?? "#ffffff";
   const borderColor2 = room?.data?.borderColor2 ?? "#222222";
+  const fontSize = room?.data?.fontSize ?? 4;
+  const fontFamily = room?.data?.fontFamily ?? "";
+
+  useEffect(() => {
+    const f = async () => {
+      const { load } = await import("webfontloader");
+      load({
+        google: {
+          families: [fontFamily, "Roboto"],
+        },
+      });
+    };
+    f();
+  }, [fontFamily]);
 
   return (
     <Box
@@ -73,7 +88,7 @@ const View: NextPage = () => {
       }}
     >
       <SwitchTransition>
-        <CSSTransition key={title} timeout={500} classNames="fade">
+        <CSSTransition key={title} timeout={200} classNames="fade">
           <Box
             sx={{
               "&.fade-enter": {
@@ -81,14 +96,14 @@ const View: NextPage = () => {
               },
               "&.fade-enter-active": {
                 opacity: 1,
-                transition: `opacity 500ms`,
+                transition: `opacity 200ms`,
               },
               "&.fade-exit": {
                 opacity: 1,
               },
               "&.fade-exit-active": {
                 opacity: 0,
-                transition: `opacity 500ms`,
+                transition: `opacity 200ms`,
               },
             }}
           >
@@ -98,7 +113,8 @@ const View: NextPage = () => {
                 width: "100%",
               }}
               style={{
-                fontSize: "4rem",
+                fontSize: `${fontSize}rem`,
+                fontFamily: `'${fontFamily}',Roboto,Helvetica,Arial,sans-serif`,
                 fontWeight: "bold",
                 color: textColor,
                 textShadow: [

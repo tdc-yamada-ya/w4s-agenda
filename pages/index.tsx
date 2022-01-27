@@ -1,13 +1,8 @@
-import {
-  Checkbox,
-  Container,
-  FormControlLabel,
-  FormGroup,
-  Stack,
-  Typography,
-} from "@mui/material";
+import { Box, Container, Link, Stack, Typography } from "@mui/material";
 import type { NextPage } from "next";
+import Image from "next/image";
 import CreateRoomForm from "../src/components/CreateRoomForm";
+import ScreenshotImage from "../docs/images/screenshot.jpg";
 
 const Home: NextPage = () => {
   return (
@@ -20,11 +15,21 @@ const Home: NextPage = () => {
           </Typography>
         </Stack>
         <Typography>
-          This is a web app that creates a widget to overlay an agenda on an OBS
+          This is a web app that creates a widget to overlay an agenda on an{" "}
+          <Link
+            href="https://obsproject.com/"
+            target="_blank"
+            referrerPolicy="no-referrer"
+          >
+            OBS
+          </Link>{" "}
           or desktop. Press &quot;Create Room&quot; to create a room to register
           the agenda data.
         </Typography>
         <CreateRoomForm />
+        <Box>
+          <Image src={ScreenshotImage} alt="Screenshot" />
+        </Box>
       </Stack>
     </Container>
   );
