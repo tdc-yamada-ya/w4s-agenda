@@ -6,10 +6,11 @@ import {
   DialogContentText,
   TextField,
 } from "@mui/material";
-import { useState } from "react";
-import { useUpdateCurrentRoomItems } from "../Item";
+import { useEffect, useState } from "react";
+import { getAllItems, useUpdateCurrentRoomItems } from "../Item";
+import { useCurrentRoomID } from "../Room";
 
-export const RegisterItemsDialog = ({
+export const EditItemsDialog = ({
   open,
   onClose,
 }: {
@@ -18,14 +19,31 @@ export const RegisterItemsDialog = ({
 }) => {
   const [value, setValue] = useState("");
   const updateItems = useUpdateCurrentRoomItems();
+  const id = useCurrentRoomID();
 
   const submit = () => {
     updateItems(value.split(/\r?\n/).filter((l) => l));
     onClose();
   };
 
+  useEffect(() => {
+    if (!open) return;
+
+    const f = async () => {
+      const items = await getAllItems(id);
+      const value =
+        items
+          ?.map((item) => item.data?.title)
+          .filter((title) => title)
+          .join("\n") ?? "";
+      setValue(value);
+    };
+
+    f();
+  }, [open, id]);
+
   return (
-    <Dialog open={open} fullWidth={true} maxWidth="sm" onClose={onClose}>
+    <Dialog open={open} fullWidth={true} maxWidth="md" onClose={onClose}>
       <DialogContent>
         <DialogContentText>Enter agenda items line by line.</DialogContentText>
         <TextField
@@ -47,4 +65,4 @@ export const RegisterItemsDialog = ({
   );
 };
 
-export default RegisterItemsDialog;
+export default EditItemsDialog;

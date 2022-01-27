@@ -111,3 +111,27 @@ export const useCurrentRoomSelectedItem = (): Item | undefined => {
   const items = useCurrentRoomItems();
   return items?.[room?.data?.selectedIndex ?? -1];
 };
+
+export const getAllItems = async (
+  id: RoomID | undefined
+): Promise<Item[] | undefined> => {
+  if (id == null) return;
+
+  const r = await getDocs(
+    query(collection(db, "rooms", id, "items"), orderBy("index"))
+  );
+
+  const items: Item[] = [];
+
+  r.forEach((e) => {
+    items.push({
+      id: {
+        parentID: id,
+        id: e.id,
+      },
+      data: e.data(),
+    });
+  });
+
+  return items;
+};

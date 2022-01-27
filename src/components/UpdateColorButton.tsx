@@ -13,7 +13,7 @@ const useUpdateColor = (name: ColorName, color: string) => {
 };
 
 export const UpdateColorButton = ({
-  color = "#ffffff",
+  color = "transparent",
   name,
 }: {
   color?: string;

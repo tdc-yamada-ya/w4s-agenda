@@ -1,9 +1,11 @@
-import { Button, Stack, Typography } from "@mui/material";
+import { Stack, Typography } from "@mui/material";
 import DeleteRoomButton from "./DeleteRoomButton";
 import HorizontalAlignButtons from "./HorizontalAlignButtons";
-import RegisterItemsButton from "./RegisterItemsButton";
+import EditItemsButton from "./EditItemsButton";
 import UpdateColorButtons from "./UpdateColorButtons";
 import VerticalAlignButtons from "./VerticalAlignButtons";
+import FontSizeSlider from "./FontSizeSlider";
+import { UpdateFontFamilyPicker } from "./UpdateFontFamilyPicker";
 
 const SectionTitle = ({ children }: { children: string }) => (
   <Typography sx={{ fontWeight: 800 }}>{children}</Typography>
@@ -15,8 +17,12 @@ export const SettingsPanel = () => {
       <Stack spacing={2}>
         <SectionTitle>Items</SectionTitle>
         <Stack direction="row">
-          <RegisterItemsButton />
+          <EditItemsButton />
         </Stack>
+      </Stack>
+      <Stack spacing={2}>
+        <SectionTitle>Font Size</SectionTitle>
+        <FontSizeSlider />
       </Stack>
       <Stack spacing={2}>
         <SectionTitle>Alignment</SectionTitle>
@@ -24,6 +30,10 @@ export const SettingsPanel = () => {
           <HorizontalAlignButtons />
           <VerticalAlignButtons />
         </Stack>
+      </Stack>
+      <Stack spacing={2}>
+        <SectionTitle>Font Family</SectionTitle>
+        <UpdateFontFamilyPicker />
       </Stack>
       <Stack spacing={2}>
         <SectionTitle>Text Color</SectionTitle>

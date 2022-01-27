@@ -3,7 +3,7 @@ import CheckIcon from "@mui/icons-material/Check";
 
 export const ColorButton = ({
   checked = false,
-  color = "#ffffff",
+  color = "transparent",
   onClick,
 }: {
   checked?: boolean;
@@ -22,6 +22,7 @@ export const ColorButton = ({
     }}
     style={{
       backgroundColor: color,
+      borderStyle: color === "transparent" ? "dashed" : "solid",
     }}
     onClick={onClick}
   >
